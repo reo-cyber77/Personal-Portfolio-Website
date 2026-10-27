@@ -64,6 +64,20 @@ h2{font-family:"IBM Plex Serif",Georgia,serif;font-size:1.5rem;font-weight:600;m
 .project p{margin:0 0 1rem;color:var(--muted);max-width:38rem}
 .project .btn{margin-top:1.25rem;border-color:var(--accent);color:var(--accent)}
 .soon{margin:1.5rem 0 0;color:var(--muted)}
+.project .btns{margin-top:1.25rem}
+.project .btns .btn{margin-top:0}
+.project .btn.solid,.btn.solid{background:var(--accent);color:var(--bg)}
+.guide p{max-width:38rem;margin:0 0 1rem}
+.guide h3{margin:2rem 0 .6rem;font-size:1.15rem;font-weight:600}
+.guide ol{padding-left:1.4rem;max-width:38rem;margin:0 0 1rem}
+.guide li{margin:0 0 .7rem}
+.note{border-left:4px solid var(--accent);background:var(--bg);padding:.9rem 1.1rem;max-width:38rem;margin:1rem 0}
+.note p{margin:0}
+.guide details{border-top:1px solid var(--line);max-width:38rem;padding:.85rem 0}
+.guide details:last-of-type{border-bottom:1px solid var(--line)}
+.guide summary{cursor:pointer;font-weight:600}
+.guide details>*:not(summary){margin-top:.75rem}
+.guide details ul{padding-left:1.3rem;margin-bottom:0}
 .edu h3{margin:0;font-size:1.2rem;font-weight:600}
 .edu p{margin:.25rem 0 0;color:var(--muted)}
 .contact dl{margin:0}
@@ -156,14 +170,68 @@ footer{background:var(--hero);color:var(--hero-muted);padding:2rem 0 2.5rem;font
           <h3>TaskBuddy</h3>
           <p>A personal task tracker for Windows. It lets you add tasks, mark them as done and keep your to-do list in one place. This is my first WinForms project.</p>
           <div class="chips"><span class="chip">C#</span><span class="chip">WinForms</span></div>
-          <a class="btn" href="https://github.com/reo-cyber77/TaskBuddy" target="_blank" rel="noopener">View repository</a>
+          <div class="btns">
+            <a class="btn solid" href="TaskBuddy.zip" download>Download for Windows</a>
+            <a class="btn" href="#taskbuddy-guide">How to install</a>
+            <a class="btn" href="https://github.com/reo-cyber77/TaskBuddy" target="_blank" rel="noopener">View source code</a>
+          </div>
         </article>
         <p class="soon">More projects will be added here as I keep learning.</p>
       </div>
     </div>
   </section>
 
-  <section id="education" class="alt">
+  <section id="taskbuddy-guide" class="alt">
+    <div class="wrap row">
+      <h2>Get TaskBuddy</h2>
+      <div class="guide">
+        <p>TaskBuddy is a simple to-do list for your Windows computer. Type what you need to do, tick it off when it’s finished and come back to it any time. No sign-up, no internet and nothing to learn first.</p>
+        <p><a class="btn solid" href="TaskBuddy.zip" download>Download TaskBuddy (about 100 KB)</a></p>
+
+        <h3>Before you start</h3>
+        <p>TaskBuddy needs a free Microsoft component called the <strong>.NET 10 Desktop Runtime</strong>. If you’ve never installed it, <a href="https://dotnet.microsoft.com/download/dotnet/10.0/runtime/desktop" target="_blank" rel="noopener">open the Microsoft download page</a>, choose <strong>x64</strong> under “Run desktop apps” and run the installer once. Most Windows 10 and 11 computers use x64. Windows will also tell you if it’s missing when you open TaskBuddy.</p>
+
+        <h3>Install it in four steps</h3>
+        <ol>
+          <li>Click <strong>Download</strong> above. The file <strong>TaskBuddy.zip</strong> is saved in your Downloads folder.</li>
+          <li>Open your Downloads folder, right-click <strong>TaskBuddy.zip</strong>, choose <strong>Extract All…</strong> and click <strong>Extract</strong>. A normal folder opens.</li>
+          <li>In that folder, double-click <strong>TaskBuddy</strong> (it may show as TaskBuddy.exe). The window opens after a second or two.</li>
+          <li>If Windows shows a blue box saying “Windows protected your PC”, click <strong>More info</strong>, then <strong>Run anyway</strong>. You only need to do this the first time.</li>
+        </ol>
+        <div class="note"><p><strong>Important:</strong> always extract the zip first. TaskBuddy won’t work properly if you run it from inside the zip file.</p></div>
+        <p>Tip: right-click TaskBuddy and choose <strong>Send to → Desktop (create shortcut)</strong> so you can open it with a double-click from your desktop.</p>
+
+        <h3>How to use it</h3>
+        <details>
+          <summary>Add a task</summary>
+          <p>Click the box that says “What needs doing?”, type your task and press <strong>Enter</strong> or click <strong>Add</strong>. The task appears in the list and the box clears, ready for the next one.</p>
+        </details>
+        <details>
+          <summary>Mark a task as done</summary>
+          <p>Click a task, then click <strong>Complete / Undo</strong>. It gets a ✓ and turns gray. Select it and click the button again to undo. You can also double-click a task.</p>
+        </details>
+        <details>
+          <summary>Delete tasks</summary>
+          <p>Click a task, then click <strong>Delete</strong> or press the Delete key. To remove everything you’ve finished, click <strong>Clear completed</strong>. TaskBuddy asks you to confirm first and never touches unfinished tasks.</p>
+        </details>
+        <details>
+          <summary>Are my tasks saved?</summary>
+          <p>Yes, automatically. Every time you add, complete or delete a task, your list is saved, so it’s waiting for you the next time you open TaskBuddy. Your list is kept in a small file called tasks.txt on your own computer. To see it, press the Windows key + R, type <strong>%AppData%\TaskBuddy</strong> and press Enter.</p>
+        </details>
+        <details>
+          <summary>Common questions</summary>
+          <ul>
+            <li><strong>Complete and Delete are grayed out.</strong> Click a task in the list first.</li>
+            <li><strong>Clear completed is grayed out.</strong> You haven’t marked any task as done yet.</li>
+            <li><strong>My tasks are missing.</strong> Make sure you’re signed in to the same Windows account as before.</li>
+            <li><strong>Windows says .NET is needed.</strong> Install the .NET 10 Desktop Runtime from the “Before you start” section, then open TaskBuddy again.</li>
+          </ul>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section id="education">
     <div class="wrap row">
       <h2>Education</h2>
       <div class="edu">
