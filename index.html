@@ -78,6 +78,22 @@ h2{font-family:"IBM Plex Serif",Georgia,serif;font-size:1.5rem;font-weight:600;m
 .guide summary{cursor:pointer;font-weight:600}
 .guide details>*:not(summary){margin-top:.75rem}
 .guide details ul{padding-left:1.3rem;margin-bottom:0}
+.chat-fab{position:fixed;right:1rem;bottom:calc(1rem + env(safe-area-inset-bottom,0px));z-index:20;background:var(--accent);color:var(--bg);border:0;border-radius:999px;padding:.8rem 1.2rem;font:inherit;font-weight:600;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.25)}
+.chat{position:fixed;right:1rem;bottom:calc(4.5rem + env(safe-area-inset-bottom,0px));z-index:20;width:min(22rem,calc(100vw - 2rem));max-height:min(33rem,calc(100dvh - 8rem));display:none;flex-direction:column;background:var(--bg);border:1px solid var(--line);border-radius:8px;box-shadow:0 8px 28px rgba(0,0,0,.28);overflow:hidden}
+.chat.open{display:flex}
+.chat-head{background:var(--hero);color:#fff;padding:.8rem 1rem;display:flex;justify-content:space-between;align-items:center;font-weight:600}
+.chat-head button{background:none;border:0;color:#fff;font-size:1.4rem;cursor:pointer;line-height:1}
+.chat-log{flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:.6rem;font-size:.97rem;line-height:1.5}
+.msg{max-width:90%;padding:.55rem .8rem;border-radius:8px}
+.msg.bot{background:var(--chip);align-self:flex-start}
+.msg.me{background:var(--accent);color:var(--bg);align-self:flex-end}
+.msg a{color:inherit;font-weight:600;display:block;margin-top:.35rem}
+.quick{display:flex;flex-wrap:wrap;gap:.4rem;padding:0 1rem .75rem}
+.quick button{font:inherit;font-size:.9rem;background:var(--bg);color:var(--accent);border:1.5px solid var(--accent);border-radius:999px;padding:.15rem .7rem;cursor:pointer}
+.chat-form{display:flex;gap:.5rem;padding:.75rem;border-top:1px solid var(--line)}
+.chat-form input{flex:1;min-width:0;font:inherit;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:4px;padding:.5rem .7rem}
+.chat-form button{font:inherit;font-weight:600;background:var(--accent);color:var(--bg);border:0;border-radius:4px;padding:.5rem .9rem;cursor:pointer}
+.chat-fab:focus-visible,.chat button:focus-visible,.chat input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 .edu h3{margin:0;font-size:1.2rem;font-weight:600}
 .edu p{margin:.25rem 0 0;color:var(--muted)}
 .contact dl{margin:0}
@@ -273,6 +289,17 @@ footer{background:var(--hero);color:var(--hero-muted);padding:2rem 0 2.5rem;font
 <footer>
   <div class="wrap">© 2026 Leonel James D. Umali</div>
 </footer>
+
+<button class="chat-fab" id="chat-open" type="button" aria-expanded="false" aria-controls="chat">Ask about me</button>
+<div class="chat" id="chat" role="dialog" aria-label="Chat about Leonel">
+  <div class="chat-head"><span>Ask about Leonel</span><button type="button" id="chat-close" aria-label="Close chat">×</button></div>
+  <div class="chat-log" id="chat-log" role="log" aria-live="polite"></div>
+  <div class="quick" id="chat-quick"></div>
+  <form class="chat-form" id="chat-form">
+    <input id="chat-input" type="text" placeholder="Type a question…" aria-label="Your question" autocomplete="off">
+    <button type="submit">Send</button>
+  </form>
+</div>
 <script>
 (function(){
   var f=document.getElementById('contact-form'); if(!f) return;
@@ -287,6 +314,82 @@ footer{background:var(--hero);color:var(--hero-muted);padding:2rem 0 2.5rem;font
       .catch(function(){ s.textContent='Your message could not be sent. Please email me directly at leoneljamesumali79@gmail.com.'; })
       .finally(function(){ b.disabled=false; b.textContent='Send message'; });
   });
+})();
+</script>
+<script>
+(function(){
+  var T={
+    about:{n:'About me',t:'Hi! I’m Leonel James D. Umali, a BSIT student at Mapúa Malayan Colleges Laguna working toward a career in cybersecurity. I build projects in C# and Python. What would you like to know?',x:['experience','projects','skills','leavemsg']},
+    experience:{n:'Experience',t:'I’m still a student, so I don’t have formal work experience listed yet. My hands-on experience comes from building projects like TaskBuddy, my first WinForms app, and from practicing object-oriented programming and data structures and algorithms.',l:[['See my projects','#projects']],x:['projects','skills','availability']},
+    projects:{n:'Projects',t:'My main project is TaskBuddy, a personal task tracker for Windows built with C# and WinForms. You can download it and read the install guide on this page, or look at the source code on GitHub.',l:[['Download and install guide','#taskbuddy-guide'],['TaskBuddy on GitHub','https://github.com/reo-cyber77/TaskBuddy']],x:['download','help','skills']},
+    download:{n:'Download TaskBuddy',t:'To get TaskBuddy: 1) Download TaskBuddy.zip. 2) Open your Downloads folder, right-click the zip and choose Extract All. 3) Open the extracted folder and double-click TaskBuddy. You need the free .NET 10 Desktop Runtime installed once.',l:[['Download TaskBuddy.zip','TaskBuddy.zip'],['Full install guide','#taskbuddy-guide']],x:['help','projects']},
+    help:{n:'Having trouble?',t:'Common fixes: if Windows shows “Windows protected your PC”, click More info, then Run anyway (first time only). If it says .NET is needed, install the free .NET 10 Desktop Runtime (x64) and open TaskBuddy again. Always extract the zip before opening the app. Complete and Delete stay grayed out until you click a task.',l:[['Get the .NET 10 Desktop Runtime','https://dotnet.microsoft.com/download/dotnet/10.0/runtime/desktop'],['Full guide','#taskbuddy-guide']],x:['leavemsg','download']},
+    skills:{n:'Skills',t:'Languages: C# and Python. Tools: GitHub, VS Code and Visual Studio. I also have skills in AI prompt engineering, verbal and written communication, teamwork and presentations.',l:[['See all skills','#skills']],x:['learning','projects','goal']},
+    learning:{n:'What I’m learning',t:'I’m currently learning WinForms, Object-Oriented Programming and Data Structures and Algorithms. I practice by building projects, like TaskBuddy.',x:['projects','skills']},
+    education:{n:'Education',t:'I’m studying for a Bachelor of Science in Information Technology at Mapúa Malayan Colleges Laguna.',l:[['School website','https://mcl.edu.ph/']],x:['goal','skills']},
+    goal:{n:'Career goal',t:'My goal is to become a cybersecurity professional. Right now I’m building a strong programming foundation, because understanding how software works is the first step toward securing it.',x:['skills','learning','availability']},
+    availability:{n:'Work with me',t:'Yes! I’m open to partnering on projects and to new opportunities. The best way to start is to leave me a message here or use the contact form.',l:[['Contact form','#contact']],x:['leavemsg','contact']},
+    contact:{n:'Contact',t:'You can email me at leoneljamesumali79@gmail.com, find me on GitHub, or leave a message right here in this chat and I’ll get it in my inbox.',l:[['Email me','mailto:leoneljamesumali79@gmail.com'],['GitHub profile','https://github.com/reo-cyber77']],x:['leavemsg','availability']},
+    resume:{n:'Résumé',t:'I don’t have a résumé posted on this site yet. If you’d like one, leave me a message and ask.',x:['leavemsg','contact']},
+    private:{n:'Personal details',t:'I only share what’s on this website. For anything else, you can leave Leonel a message.',x:['leavemsg','contact']},
+    thanks:{n:'Thanks',t:'You’re welcome! Anything else you’d like to know?',x:['about','projects','skills','leavemsg']},
+    leavemsg:{n:'Leave a message'},
+    fallback:{n:'Help',t:'I’m not sure about that one, but I can help with the topics below. If you’d like Leonel to answer your question himself, leave him a message.',x:['about','experience','projects','skills','education','leavemsg']}
+  };
+  var R=[
+    ['leavemsg',/message|leave a note|write to|talk to (him|leonel)|get in touch/g],
+    ['help',/error|not working|doesn.?t work|won.?t (open|run|start)|wont|doesnt|\.net|runtime|blue (box|screen)|protected|smartscreen|crash|problem|trouble|fail|can.?t (open|run)|cant|stuck/g],
+    ['download',/download|install|set ?up|extract|\bzip\b|run it|get taskbuddy|how (do|to) (i )?(use|open)/g],
+    ['projects',/project|taskbuddy|portfolio|built|\bbuild\b|\bapp\b|software|made/g],
+    ['experience',/experien|\bjob\b|employ|work history|worked|background/g],
+    ['education',/educat|school|degree|college|course|study|studying|mapua|mapúa|bsit|universit|student/g],
+    ['skills',/skill|\btools?\b|language|python|c#|good at|\bknow\b|prompt|communicat|teamwork|vs ?code|visual studio|programming/g],
+    ['learning',/learn|currently|\boop\b|object|\bdsa\b|data structure|algorithm|winforms/g],
+    ['goal',/goal|cyber|career|future|dream|plan/g],
+    ['availability',/collaborat|partner|\bhire\b|hiring|open to|opportunit|work together|team up|intern|available|freelance/g],
+    ['contact',/contact|e-?mail|reach|github|linkedin|social/g],
+    ['resume',/resume|résumé|\bcv\b/g],
+    ['private',/\b(age|old|address|phone|number|birthday|family|salary|live|lives|located|location)\b/g],
+    ['thanks',/thank|thanks|salamat|great|awesome|cool|nice|bye|goodbye/g],
+    ['about',/\bwho\b|yourself|introduc|\bname\b|\b(hi|hello|hey)\b/g]
+  ];
+  function pick(q){q=q.toLowerCase();var best='fallback',top=0;R.forEach(function(r){var m=q.match(r[1]);var s=m?m.length:0;if(s>top){top=s;best=r[0];}});return best;}
+  var box=document.getElementById('chat'),log=document.getElementById('chat-log'),input=document.getElementById('chat-input'),openB=document.getElementById('chat-open'),chips=document.getElementById('chat-quick'),started=false,flow=null,data={};
+  var MAIN=['about','experience','projects','skills','education','contact','leavemsg'];
+  var AI_ENDPOINT='';
+  var hist=[];
+  function askAI(v){
+    hist.push({role:'user',content:v});hist=hist.slice(-8);
+    var m=say('bot','…');
+    fetch(AI_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:hist})})
+      .then(function(r){if(!r.ok)throw new Error('failed');return r.json();})
+      .then(function(d){var t=d&&d.reply;if(!t)throw new Error('empty');hist.push({role:'assistant',content:t});fill(m,t);showChips(['leavemsg','projects','skills','contact']);})
+      .catch(function(){m.remove();hist.pop();go(pick(v));});
+  }
+  function fill(m,text,links){m.textContent=text;(links||[]).forEach(function(l){var a=document.createElement('a');a.textContent=l[0];a.href=l[1];if(/\.zip$/.test(l[1])){a.setAttribute('download','');}else if(l[1].charAt(0)!=='#'){a.target='_blank';a.rel='noopener';}m.appendChild(a);});log.scrollTop=log.scrollHeight;}
+  function say(cls,text,links){var m=document.createElement('div');m.className='msg '+cls;fill(m,text,links);log.appendChild(m);log.scrollTop=log.scrollHeight;return m;}
+  function showChips(ids){chips.textContent='';ids.forEach(function(id){var b=document.createElement('button');b.type='button';b.textContent=id==='cancel'?'Cancel':T[id].n;b.addEventListener('click',function(){say('me',b.textContent);if(id==='cancel'){flowStep('cancel');}else{go(id);}});chips.appendChild(b);});}
+  function respond(id){var a=T[id],m=say('bot','…');setTimeout(function(){fill(m,a.t,a.l);showChips(a.x||MAIN);},350);}
+  function go(id){if(id==='leavemsg'){startFlow();}else{respond(id);}}
+  function startFlow(){flow='name';data={};input.placeholder='Your name';say('bot','Sure! I’ll send your message straight to Leonel’s inbox. First, what’s your name? You can type “cancel” to stop.');showChips(['cancel']);input.focus();}
+  function endFlow(text){flow=null;input.placeholder='Type a question…';say('bot',text);showChips(MAIN);}
+  function flowStep(v){
+    if(/^\s*cancel\s*$/i.test(v)){endFlow('No problem, I cancelled that. Anything else I can help with?');return;}
+    if(flow==='name'){data.name=v;flow='email';input.placeholder='Your email';say('bot','Thanks, '+v+'. What’s your email address, so Leonel can reply?');}
+    else if(flow==='email'){if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)){say('bot','That doesn’t look like an email address. Please try again.');return;}data.email=v;flow='msg';input.placeholder='Your message';say('bot','Got it. What would you like to say?');}
+    else if(flow==='msg'){data.message=v;flow='sending';var m=say('bot','Sending…');
+      var body={name:data.name,email:data.email,message:data.message,_subject:'New message from your portfolio chatbot',_template:'table',_captcha:'false'};
+      fetch('https://formsubmit.co/ajax/leoneljamesumali79@gmail.com',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(body)})
+        .then(function(r){if(!r.ok)throw new Error('failed');return r.json();})
+        .then(function(){m.remove();endFlow('Thank you, '+data.name+'! Your message was sent. Leonel will reply to '+data.email+'.');})
+        .catch(function(){m.remove();endFlow('Sorry, your message could not be sent. Please email leoneljamesumali79@gmail.com directly.');});}
+  }
+  function send(v){v=v.trim();if(!v)return;say('me',v);if(flow==='sending')return;if(flow){flowStep(v);return;}var id=pick(v);if(id==='leavemsg'||!AI_ENDPOINT){go(id);}else{askAI(v);}}
+  function setOpen(o){box.classList.toggle('open',o);openB.setAttribute('aria-expanded',o);if(o){if(!started){started=true;say('bot',T.about.t);if(AI_ENDPOINT){say('bot','I’m an AI assistant, so I can make mistakes. For anything important, please contact Leonel directly.');}showChips(MAIN);}input.focus();}else{openB.focus();}}
+  openB.addEventListener('click',function(){setOpen(!box.classList.contains('open'));});
+  document.getElementById('chat-close').addEventListener('click',function(){setOpen(false);});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&box.classList.contains('open'))setOpen(false);});
+  document.getElementById('chat-form').addEventListener('submit',function(e){e.preventDefault();var v=input.value;input.value='';send(v);});
 })();
 </script>
 </body>
